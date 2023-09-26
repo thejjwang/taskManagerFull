@@ -1,8 +1,16 @@
 import React from 'react'
 
-const TaskList = () => {
+const TaskList = ({tasks}) => {
   return (
-    <div>TaskList</div>
+    <div>
+        {tasks.map((task, index) => {
+        <li key={index}>
+            <h2>{task.title}</h2>
+            <h3>{task.description}</h3>
+            <p>{task.status}</p>
+        </li>})
+    }
+    </div>
   )
 }
 

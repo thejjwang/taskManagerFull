@@ -1,17 +1,19 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
+const path = require('path');
 
 const port = 5001;
 const dbPath = './server/db.json'; 
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '..', 'client')));
 
 app.get('/', (req, res) => {
-    res.send('welcome');
+    res.sendFile(path.join(__dirname, '..', 'client', 'index.html'));
 })
 
-app.get('/getTasks', (req, res) => {
+app.get('/db.json', (req, res) => {
   fs.readFile(dbPath, 'utf8', (err, data) => {
     if (err) {
       console.error('Error reading db.json:', err);

@@ -24,11 +24,26 @@ function App() {
     fetchTasks(); // Fetch tasks when the component mounts
   }, []);
   
+  const deleteTask = async (taskId) => {
+    try {
+      const response = await fetch(`http://localhost:5001/api/tasks/${taskId}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      // If the task was successfully deleted, update the task list.
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+      } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
+
   return (
     <div className="bg-blue-200 min-h-screen">
       <Header />
-      <CrudTask />
-      <TaskList tasks={tasks} />
+      <CrudTask setTasks={setTasks} />
+      <TaskList tasks={tasks} deleteTask={deleteTask}/>
     </div>
   );
 }

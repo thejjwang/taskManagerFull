@@ -28,7 +28,6 @@ app.get('/api/tasks', async (req, res) => {
   res.json(data.tasks);
 });
 
-
 // Create a new task
 app.post('/api/tasks', (req, res) => {
   // Implement logic to create a new task and save it to db.json
@@ -43,12 +42,24 @@ app.put('/api/tasks/:id', (req, res) => {
 });
 
 // Delete a task
-app.delete('/api/tasks/:id', (req, res) => {
+app.delete('/api/tasks/:id', async (req, res) => {
   const taskId = req.params.id;
-  // Implement logic to delete the task with the specified taskId
-  // Respond with a success message
+  try {
+    // Fetch current data from db.json
+    const data = await fetchData();
+    // Filter out the task to be deleted
+    const updatedTasks = data.tasks.filter((task) => task.id !== taskId);
+    // Update the data with the filtered tasks
+    data.tasks = updatedTasks;
+    // Save the updated data back to db.json
+    await fs.writeFile(dbPath, JSON.stringify(data, null, 2), 'utf8');
+    // Respond with a success message
+    res.json({ message: 'Task deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting task:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
-
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

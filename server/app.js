@@ -1,38 +1,31 @@
+const fs = require('fs').promises;
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
 const app = express();
-
-
 const port = process.env.PORT || 5001;
-const dbPath = './server/db.json'; 
 
-// app.use(express.json());
-app.use(express.static(path.join(__dirname, '..', 'client')));
+const dbPath = '/Users/jj/Desktop/Ahsan/taskManagerFull/server/db.json'; 
 
-app.get('/', (req, res) => {
-  res.send('hello')
-    // res.sendFile(path.join(__dirname, '..', 'client', 'vite-project', 'index.html'));
-})
+// middleware
+app.use(express.json());
 
-app.get('/api/tasks', (req, res) => {
-  fs.readFile(dbPath, 'utf8', (err, data) => {
-    if (err) {
-      console.error('Error reading db.json:', err);
-      res.status(500).json({ error: 'Internal Server Error' });
-      return;
-    }
+// Function to read data from the JSON file
+const fetchData = async () => {
+  try {
+    // console.log('Current working directory:', process.cwd());
+    const data = await fs.readFile(dbPath, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('Error reading data from db.json:', error);
+    return { tasks: [] }; // Return an empty array as default
+  }
+};
 
-    try {
-      const dbData = JSON.parse(data);
-      const tasks = dbData.Tasks;
-      res.json({ tasks });
-    } catch (parseError) {
-      console.error('Error parsing db.json:', parseError);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
+// GET all tasks
+app.get('/api/tasks', async (req, res) => {
+  const data = await fetchData();
+  res.json(data.tasks);
 });
+
 
 // Create a new task
 app.post('/api/tasks', (req, res) => {

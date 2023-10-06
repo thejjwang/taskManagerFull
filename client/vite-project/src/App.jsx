@@ -5,17 +5,21 @@ import TaskList from './TaskList'
 function App() {
   const [tasks, setTasks] = useState([])
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/tasks");
-        const data = await response.json();
-        console.log(data);
-        setTasks(data);
-      } catch (err) {
-        console.log("error fetching tasks:" + err);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await fetch('/api/tasks');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-    };
+      const data = await response.json();
+      setTasks(data);
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  };
+
+  useEffect(() => {
     fetchTasks()
   },[])
 

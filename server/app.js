@@ -2,11 +2,13 @@ const fs = require('fs').promises;
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 5001;
+const cors = require('cors');
 
 const dbPath = '/Users/jj/Desktop/Ahsan/taskManagerFull/server/db.json'; 
 
 // middleware
 app.use(express.json());
+app.use(cors());
 
 // Function to read data from the JSON file
 const fetchData = async () => {

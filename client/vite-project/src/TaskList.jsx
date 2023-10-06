@@ -2,7 +2,7 @@ import React from 'react';
 
 const TaskList = ({ tasks }) => {
   return (
-    <div>
+    <div className='mt-16'>
       {tasks.map((task) => (
         <li key={task.id}>
           <h2>{task.title}</h2>

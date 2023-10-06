@@ -25,7 +25,7 @@ function App() {
   }, []);
   
   return (
-    <div>
+    <div className="bg-blue-200 min-h-screen">
       <Header />
       <CrudTask />
       <TaskList tasks={tasks} />

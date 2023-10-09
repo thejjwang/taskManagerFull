@@ -26,7 +26,7 @@ function App() {
   
   const deleteTask = async (taskId) => {
     try {
-      const response = await fetch(`http://localhost:5001/api/tasks/${taskId}`, {
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
         method: 'DELETE',
       });
       if (!response.ok) {
